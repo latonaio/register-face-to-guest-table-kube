@@ -9,9 +9,6 @@ import os
 
 import MySQLdb
 
-# AION共通モジュール
-from aion.microservice import main_decorator, Options, WITHOUT_KANBAN
-
 # RabbitMQ用モジュール
 from rabbitmq_client import RabbitmqClient
 
@@ -141,11 +138,5 @@ async def main():
             })
             continue
 
-
-@main_decorator(SERVICE_NAME, WITHOUT_KANBAN)
-def main_wrapper(opt: Options):
-    asyncio.run(main())
-
-
 if __name__ == '__main__':
-    main_wrapper()
+    asyncio.run(main())

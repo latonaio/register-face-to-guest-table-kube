@@ -46,16 +46,18 @@ AzureFaceAPIの返り値としての性別・年齢情報
 make docker-build
 ```
 2.aion-service-definitions/services.yml に設定を記載し、AionCore経由でKubernetesコンテナを起動します。    
-services.ymlへの記載例：   
-get_one_kanbanのメソッドで動作するので、Jobとして起動します。  
+services.ymlへの記載例：     
 ```
-  register-face-to-guest-table:
-    always: no
-    multiple: yes
+  register-face-to-guest-table-kube:
+    startup: yes
+    always: yes
+    scale: 1
     env:
       MYSQL_USER: XXXXXX
       MYSQL_HOST: XXXXXX
-      MYSQL_PASSWORD: XXXXXXXX
+      MYSQL_PASSWORD: XXXXXX
+      RABBITMQ_URL: amqp://username:password@rabbitmq:5672/virtualhost
+      QUEUE_FROM: queue_from
 ```
 ## Flowchart  
 ![img](doc/flowchart.png)
