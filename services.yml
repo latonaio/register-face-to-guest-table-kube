@@ -1,0 +1,10 @@
+register-face-to-guest-table-kube:
+  startup: yes
+  always: yes
+  scale: 1
+  env:
+    MYSQL_USER: XXXXXX
+    MYSQL_HOST: XXXXXX
+    MYSQL_PASSWORD: XXXXXX
+    RABBITMQ_URL: amqp://username:password@rabbitmq:5672/virtualhost
+    QUEUE_FROM: queue_from
