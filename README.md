@@ -48,16 +48,16 @@ make docker-build
 2.aion-service-definitions/services.yml に設定を記載し、AionCore経由でKubernetesコンテナを起動します。    
 services.ymlへの記載例：     
 ```
-  register-face-to-guest-table-kube:
-    startup: yes
-    always: yes
-    scale: 1
-    env:
-      MYSQL_USER: XXXXXX
-      MYSQL_HOST: XXXXXX
-      MYSQL_PASSWORD: XXXXXX
-      RABBITMQ_URL: amqp://username:password@rabbitmq:5672/virtualhost
-      QUEUE_FROM: queue_from
+register-face-to-guest-table-kube:
+  startup: yes
+  always: yes
+  scale: 1
+  env:
+    MYSQL_USER: XXXXXX
+    MYSQL_HOST: XXXXXX
+    MYSQL_PASSWORD: XXXXXX
+    RABBITMQ_URL: amqp://username:password@rabbitmq:5672/virtualhost
+    QUEUE_ORIGIN: register-face-to-guest-table-kube-queue
 ```
 ## Flowchart  
 ![img](doc/flowchart.png)
