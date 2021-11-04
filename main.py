@@ -86,15 +86,15 @@ async def main():
     # RabbitMQ接続情報
     rabbitmq_url = os.environ['RABBITMQ_URL']
     # キューの読み込み元
-    queue_from = os.environ['QUEUE_FROM']
+    queue_origin = os.environ['QUEUE_ORIGIN']
 
     try:
-        mq_client = await RabbitmqClient.create(rabbitmq_url, {queue_from})
+        mq_client = await RabbitmqClient.create(rabbitmq_url, {queue_origin})
     except Exception as e:
         logger.error({
             'message': 'failed to connect rabbitmq!',
             'error': str(e),
-            'queue_from': queue_from,
+            'queue_origin': queue_origin,
         })
         # 本来 sys.exit を使うべきだが、効かないので
         os._exit(1)
