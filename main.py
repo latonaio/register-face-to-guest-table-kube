@@ -70,12 +70,12 @@ class OmotebakoDB():
             ("%s"); 
             ''' % (face_image_path)
 
-    def updateGuest(self, guest_id, gender, age, face_image_path, face_id_azure):
+    def updateGuest(self, guest_id, face_image_path, face_id_azure):
         sql = ''' 
             update Omotebako.guest
-            set gender_by_face="%s", age_by_face=%s, face_image_path="%s", face_id_azure="%s"
+            set face_image_path="%s", face_id_azure="%s"
             where guest_id=%s ; 
-            ''' % (gender, age, face_image_path, face_id_azure, guest_id)
+            ''' % (face_image_path, face_id_azure, guest_id)
         self.cursor.execute(sql)
         self.connection.commit()
 
@@ -86,15 +86,15 @@ async def main():
     # RabbitMQ接続情報
     rabbitmq_url = os.environ['RABBITMQ_URL']
     # キューの読み込み元
-    queue_from = os.environ['QUEUE_FROM']
+    queue_origin = os.environ['QUEUE_ORIGIN']
 
     try:
-        mq_client = await RabbitmqClient.create(rabbitmq_url, {queue_from})
+        mq_client = await RabbitmqClient.create(rabbitmq_url, {queue_origin})
     except Exception as e:
         logger.error({
             'message': 'failed to connect rabbitmq!',
             'error': str(e),
-            'queue_from': queue_from,
+            'queue_origin': queue_origin,
         })
         # 本来 sys.exit を使うべきだが、効かないので
         os._exit(1)
@@ -111,14 +111,11 @@ async def main():
                 guest_id = int(message.data.get('guest_id'))
                 image = message.data.get('filepath')
                 face_id_azure = message.data.get('face_id_azure')
-                attributes = message.data.get('attributes')
 
                 try:
                     db = OmotebakoDB()
                     db.updateGuest(
                         guest_id=guest_id,
-                        gender=attributes.get('gender'),
-                        age=attributes.get('age'),
                         face_image_path=image,
                         face_id_azure=face_id_azure
                     )
@@ -129,7 +126,13 @@ async def main():
                     })
                     raise e
 
-                logger.info('updateGuest succeeded')
+                logger.info({
+                    'message': 'updateGuest succeeded',
+                    'params': {
+                      "guest_id":   guest_id,
+                      "face_id": face_id_azure,
+                    } 
+                })
 
         except Exception as e:
             logger.error({

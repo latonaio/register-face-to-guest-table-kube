@@ -7,4 +7,4 @@ register-face-to-guest-table-kube:
     MYSQL_HOST: XXXXXX
     MYSQL_PASSWORD: XXXXXX
     RABBITMQ_URL: amqp://username:password@rabbitmq:5672/virtualhost
-    QUEUE_FROM: queue_from
+    QUEUE_ORIGIN: register-face-to-guest-table-kube-queue
